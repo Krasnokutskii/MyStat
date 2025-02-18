@@ -1,0 +1,156 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "Add" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить"
+          }
+        }
+      }
+    },
+    "Add a person to start tracking their stats" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавь человека чтобы начать следить за его характеристиками"
+          }
+        }
+      }
+    },
+    "Add Category" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить категорию"
+          }
+        }
+      }
+    },
+    "Add Measurement" : {
+
+    },
+    "Add Person" : {
+
+    },
+    "AppName" : {
+      "comment" : "какой-то комментарий тут",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My Stats"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мои Параметры"
+          }
+        }
+      }
+    },
+    "Basic Information" : {
+
+    },
+    "Cancel" : {
+      "comment" : "Закрыть",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закрыть"
+          }
+        }
+      }
+    },
+    "Category" : {
+
+    },
+    "Current:" : {
+
+    },
+    "Date" : {
+      "comment" : "Дата"
+    },
+    "Delete" : {
+
+    },
+    "Enter a name for the new category" : {
+      "comment" : "Введите имя для новой категории",
+      "extractionState" : "stale",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите имя для новой категории"
+          }
+        }
+      }
+    },
+    "History" : {
+
+    },
+    "Icon" : {
+
+    },
+    "Initial Value" : {
+
+    },
+    "Measurement Settings" : {
+
+    },
+    "My Stats" : {
+
+    },
+    "New Stat" : {
+
+    },
+    "New Value" : {
+
+    },
+    "No People" : {
+
+    },
+    "Person Name" : {
+
+    },
+    "Search" : {
+
+    },
+    "Select Category" : {
+
+    },
+    "Select Icon" : {
+
+    },
+    "Stat Name" : {
+
+    },
+    "Statistics" : {
+
+    },
+    "Step" : {
+
+    },
+    "Step Value" : {
+
+    },
+    "Type" : {
+
+    },
+    "Value" : {
+
+    }
+  },
+  "version" : "1.0"
+}
