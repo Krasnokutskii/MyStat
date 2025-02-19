@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E6745BED2D6528BC000800D3 /* StatMeasurementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6745BEC2D6528BC000800D3 /* StatMeasurementModel.swift */; };
 		E6745BEF2D65294A000800D3 /* StatDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6745BEE2D65294A000800D3 /* StatDetailView.swift */; };
+		E6745BF72D65E39A000800D3 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6745BF62D65E39A000800D3 /* ChartView.swift */; };
 		E6A82D112D4B66C2009995C9 /* AddStatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A82D102D4B66C2009995C9 /* AddStatView.swift */; };
 		E6A82D132D4B6736009995C9 /* StatDefinitionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A82D122D4B6736009995C9 /* StatDefinitionModel.swift */; };
 		E6A82D172D4B73AC009995C9 /* StatMeasurementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A82D162D4B73AC009995C9 /* StatMeasurementModel.swift */; };
@@ -21,6 +22,7 @@
 /* Begin PBXFileReference section */
 		E6745BEC2D6528BC000800D3 /* StatMeasurementModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatMeasurementModel.swift; sourceTree = "<group>"; };
 		E6745BEE2D65294A000800D3 /* StatDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatDetailView.swift; sourceTree = "<group>"; };
+		E6745BF62D65E39A000800D3 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		E6A82D102D4B66C2009995C9 /* AddStatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddStatView.swift; sourceTree = "<group>"; };
 		E6A82D122D4B6736009995C9 /* StatDefinitionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatDefinitionModel.swift; sourceTree = "<group>"; };
 		E6A82D162D4B73AC009995C9 /* StatMeasurementModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatMeasurementModel.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				E6A82D122D4B6736009995C9 /* StatDefinitionModel.swift */,
 				E6745BEC2D6528BC000800D3 /* StatMeasurementModel.swift */,
 				E6745BEE2D65294A000800D3 /* StatDetailView.swift */,
+				E6745BF62D65E39A000800D3 /* ChartView.swift */,
 				E6D3B6BC2D649C8D00EDE847 /* Resources */,
 				E6EFCEAD2D45547F008FF9CE /* Assets.xcassets */,
 				E6745BF42D652957000800D3 /* Preview Content */,
@@ -160,6 +163,7 @@
 				E6A82D132D4B6736009995C9 /* StatDefinitionModel.swift in Sources */,
 				E6EFCEAA2D45547E008FF9CE /* MyStatsApp.swift in Sources */,
 				E6A82D192D4C4B26009995C9 /* PersonButton.swift in Sources */,
+				E6745BF72D65E39A000800D3 /* ChartView.swift in Sources */,
 				E6745BED2D6528BC000800D3 /* StatMeasurementModel.swift in Sources */,
 				E6EFCEB82D45549A008FF9CE /* MainPanel.swift in Sources */,
 				E6A82D112D4B66C2009995C9 /* AddStatView.swift in Sources */,

@@ -215,177 +215,177 @@ struct StatRow: View {
     }
 }
 
-struct ChartView: View {
-    let measurements: [StatMeasurement]
-    @State private var selectedMeasurement: StatMeasurement?
-    
-    private var sortedMeasurements: [StatMeasurement] {
-        measurements.sorted { $0.date < $1.date }
-    }
-    
-    var body: some View {
-        mainChart
-            .chartXScale(domain: chartDomain)
-            .chartYScale(domain: .automatic(includesZero: false))
-            .chartXAxis(content: xAxis)
-            .chartYAxis(content: yAxis)
-            .frame(height: 220)
-            .padding(.vertical)
-            .gesture(selectionGesture)
-    }
-    
-    private var mainChart: some View {
-        Chart(sortedMeasurements) { measurement in
-            areaMark(for: measurement)
-            lineMark(for: measurement)
-            dotMark(for: measurement)
-            selectionMark(for: measurement)
-        }
-    }
-    
-    private func areaMark(for measurement: StatMeasurement) -> some ChartContent {
-        AreaMark(
-            x: .value("Date", measurement.date),
-            y: .value("Value", measurement.value)
-        )
-        .foregroundStyle(
-            LinearGradient(
-                colors: [
-                    .orange.opacity(0.3),
-                    .orange.opacity(0.1),
-                    .clear
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        )
-        .interpolationMethod(.cardinal)
-    }
-    
-    private func lineMark(for measurement: StatMeasurement) -> some ChartContent {
-        LineMark(
-            x: .value("Date", measurement.date),
-            y: .value("Value", measurement.value)
-        )
-        .interpolationMethod(.cardinal)
-        .foregroundStyle(.orange)
-        .lineStyle(StrokeStyle(lineWidth: 2))
-    }
-    
-    private func dotMark(for measurement: StatMeasurement) -> some ChartContent {
-        PointMark(
-            x: .value("Date", measurement.date),
-            y: .value("Value", measurement.value)
-        )
-        .foregroundStyle(selectedMeasurement?.id == measurement.id ? .orange : .white)
-        //.stroke(.orange, lineWidth: selectedMeasurement?.id == measurement.id ? 4 : 2)
-        .symbolSize(selectedMeasurement?.id == measurement.id ? 150 : 100)
-    }
-    
-    private func selectionMark(for measurement: StatMeasurement) -> some ChartContent {
-        if selectedMeasurement?.id == measurement.id {
-            return RuleMark(
-                x: .value("Date", measurement.date)
-            )
-            .foregroundStyle(.secondary.opacity(0.3))
-            .annotation(position: .top) {
-                selectionAnnotation(for: measurement)
-            }
-        } else {
-            return RuleMark(
-                x: .value("Date", measurement.date)
-            )
-            .opacity(0)
-        }
-    }
-    
-    private func selectionAnnotation(for measurement: StatMeasurement) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(String(format: "%.1f", measurement.value))
-                .font(.headline)
-                .foregroundColor(.orange)
-            Text(measurement.date.formatted(date: .abbreviated, time: .shortened))
-                .font(.caption2)
-                .foregroundColor(.secondary)
-        }
-        .padding(8)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(.background)
-                .shadow(radius: 2)
-        )
-    }
-    
-    private var chartDomain: ClosedRange<Date> {
-        let startDate = sortedMeasurements.first?.date ?? Date()
-        let endDate = sortedMeasurements.last?.date ?? Date()
-        return startDate...endDate
-    }
-    
-    private func xAxis() -> some AxisContent {
-        AxisMarks(position: .bottom) { value in
-            AxisValueLabel {
-                if let date = value.as(Date.self) {
-                    Text(date.formatted(.dateTime.month().day()))
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-            }
-        }
-    }
-    
-    private func yAxis() -> some AxisContent {
-        AxisMarks { value in
-            AxisValueLabel {
-                if let number = value.as(Double.self) {
-                    Text(String(format: "%.1f", number))
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-            }
-        }
-    }
-    
-    private var selectionGesture: some Gesture {
-        DragGesture()
-            .onChanged { value in
-                updateSelection(at: value.location)
-            }
-            .onEnded { _ in
-                selectedMeasurement = nil
-            }
-    }
-    
-    private func updateSelection(at location: CGPoint) {
-        guard let closestMeasurement = sortedMeasurements.min(by: {
-            abs($0.date.timeIntervalSince1970 - Double(location.x)) <
-            abs($1.date.timeIntervalSince1970 - Double(location.x))
-        }) else { return }
-        
-        selectedMeasurement = closestMeasurement
-    }
-}
-
-#Preview {
-    do {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: Person.self, StatDefinition.self, StatCategory.self, StatMeasurement.self, configurations: config)
-        
-        return NavigationStack {
-            StatDetailView(
-                personId: UUID(),
-                statDefinition: StatDefinition(
-                    name: "Example Stat",
-                    measurementType: .decimal,
-                    step: 0.5,
-                    initialValue: "0",
-                    systemImage: "ruler.fill",
-                    categoryId: UUID()
-                )
-            )
-            .modelContainer(container)
-        }
-    } catch {
-        return Text("Failed to create preview: \(error.localizedDescription)")
-    }
-} 
+//struct ChartView: View {
+//    let measurements: [StatMeasurement]
+//    @State private var selectedMeasurement: StatMeasurement?
+//    
+//    private var sortedMeasurements: [StatMeasurement] {
+//        measurements.sorted { $0.date < $1.date }
+//    }
+//    
+//    var body: some View {
+//        mainChart
+//            .chartXScale(domain: chartDomain)
+//            .chartYScale(domain: .automatic(includesZero: false))
+//            .chartXAxis(content: xAxis)
+//            .chartYAxis(content: yAxis)
+//            .frame(height: 220)
+//            .padding(.vertical)
+//            .gesture(selectionGesture)
+//    }
+//    
+//    private var mainChart: some View {
+//        Chart(sortedMeasurements) { measurement in
+//            areaMark(for: measurement)
+//            lineMark(for: measurement)
+//            dotMark(for: measurement)
+//            selectionMark(for: measurement)
+//        }
+//    }
+//    
+//    private func areaMark(for measurement: StatMeasurement) -> some ChartContent {
+//        AreaMark(
+//            x: .value("Date", measurement.date),
+//            y: .value("Value", measurement.value)
+//        )
+//        .foregroundStyle(
+//            LinearGradient(
+//                colors: [
+//                    .orange.opacity(0.3),
+//                    .orange.opacity(0.1),
+//                    .clear
+//                ],
+//                startPoint: .top,
+//                endPoint: .bottom
+//            )
+//        )
+//        .interpolationMethod(.cardinal)
+//    }
+//    
+//    private func lineMark(for measurement: StatMeasurement) -> some ChartContent {
+//        LineMark(
+//            x: .value("Date", measurement.date),
+//            y: .value("Value", measurement.value)
+//        )
+//        .interpolationMethod(.cardinal)
+//        .foregroundStyle(.orange)
+//        .lineStyle(StrokeStyle(lineWidth: 2))
+//    }
+//    
+//    private func dotMark(for measurement: StatMeasurement) -> some ChartContent {
+//        PointMark(
+//            x: .value("Date", measurement.date),
+//            y: .value("Value", measurement.value)
+//        )
+//        .foregroundStyle(selectedMeasurement?.id == measurement.id ? .orange : .white)
+//        //.stroke(.orange, lineWidth: selectedMeasurement?.id == measurement.id ? 4 : 2)
+//        .symbolSize(selectedMeasurement?.id == measurement.id ? 150 : 100)
+//    }
+//    
+//    private func selectionMark(for measurement: StatMeasurement) -> some ChartContent {
+//        if selectedMeasurement?.id == measurement.id {
+//            return RuleMark(
+//                x: .value("Date", measurement.date)
+//            )
+//            .foregroundStyle(.secondary.opacity(0.3))
+//            .annotation(position: .top) {
+//                selectionAnnotation(for: measurement)
+//            }
+//        } else {
+//            return RuleMark(
+//                x: .value("Date", measurement.date)
+//            )
+//            .opacity(0)
+//        }
+//    }
+//    
+//    private func selectionAnnotation(for measurement: StatMeasurement) -> some View {
+//        VStack(alignment: .leading, spacing: 4) {
+//            Text(String(format: "%.1f", measurement.value))
+//                .font(.headline)
+//                .foregroundColor(.orange)
+//            Text(measurement.date.formatted(date: .abbreviated, time: .shortened))
+//                .font(.caption2)
+//                .foregroundColor(.secondary)
+//        }
+//        .padding(8)
+//        .background(
+//            RoundedRectangle(cornerRadius: 8)
+//                .fill(.background)
+//                .shadow(radius: 2)
+//        )
+//    }
+//    
+//    private var chartDomain: ClosedRange<Date> {
+//        let startDate = sortedMeasurements.first?.date ?? Date()
+//        let endDate = sortedMeasurements.last?.date ?? Date()
+//        return startDate...endDate
+//    }
+//    
+//    private func xAxis() -> some AxisContent {
+//        AxisMarks(position: .bottom) { value in
+//            AxisValueLabel {
+//                if let date = value.as(Date.self) {
+//                    Text(date.formatted(.dateTime.month().day()))
+//                        .font(.caption2)
+//                        .foregroundColor(.secondary)
+//                }
+//            }
+//        }
+//    }
+//    
+//    private func yAxis() -> some AxisContent {
+//        AxisMarks { value in
+//            AxisValueLabel {
+//                if let number = value.as(Double.self) {
+//                    Text(String(format: "%.1f", number))
+//                        .font(.caption2)
+//                        .foregroundColor(.secondary)
+//                }
+//            }
+//        }
+//    }
+//    
+//    private var selectionGesture: some Gesture {
+//        DragGesture()
+//            .onChanged { value in
+//                updateSelection(at: value.location)
+//            }
+//            .onEnded { _ in
+//                selectedMeasurement = nil
+//            }
+//    }
+//    
+//    private func updateSelection(at location: CGPoint) {
+//        guard let closestMeasurement = sortedMeasurements.min(by: {
+//            abs($0.date.timeIntervalSince1970 - Double(location.x)) <
+//            abs($1.date.timeIntervalSince1970 - Double(location.x))
+//        }) else { return }
+//        
+//        selectedMeasurement = closestMeasurement
+//    }
+//}
+//
+//#Preview {
+//    do {
+//        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+//        let container = try ModelContainer(for: Person.self, StatDefinition.self, StatCategory.self, StatMeasurement.self, configurations: config)
+//        
+//        return NavigationStack {
+//            StatDetailView(
+//                personId: UUID(),
+//                statDefinition: StatDefinition(
+//                    name: "Example Stat",
+//                    measurementType: .decimal,
+//                    step: 0.5,
+//                    initialValue: "0",
+//                    systemImage: "ruler.fill",
+//                    categoryId: UUID()
+//                )
+//            )
+//            .modelContainer(container)
+//        }
+//    } catch {
+//        return Text("Failed to create preview: \(error.localizedDescription)")
+//    }
+//} 

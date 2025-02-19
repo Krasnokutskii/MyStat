@@ -130,6 +130,36 @@
             endingLineNumber = "104"
             landmarkName = "addNewPerson(name:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "BEB6022F-3A73-40C5-9AA8-E08207E7CA99 - db73f1a351851643"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyStats.MainPanel.addNewPerson(name: Swift.String) -&gt; ()"
+                  moduleName = "MyStats.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iaroslavkrasnokutskii/Documents/Develop/MyStats/MyStats/MainPanel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "104"
+                  endingLineNumber = "104">
+               </Location>
+               <Location
+                  uuid = "BEB6022F-3A73-40C5-9AA8-E08207E7CA99 - 4aa49ae6232a5cea"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (MyStats.StatCategory) -&gt; () in MyStats.MainPanel.addNewPerson(name: Swift.String) -&gt; ()"
+                  moduleName = "MyStats.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iaroslavkrasnokutskii/Documents/Develop/MyStats/MyStats/MainPanel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "105"
+                  endingLineNumber = "105">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
