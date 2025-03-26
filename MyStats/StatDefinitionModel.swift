@@ -56,17 +56,16 @@ class StatDefinition {
     var name: String
     var measurementType: MeasurementType
     var step: Double
-    var initialValue: String
+    //var initialValue: String
     var systemImage: String
     var categoryId: UUID
     @Relationship(deleteRule: .cascade) var measurements: [StatMeasurement]
     
-    init(id: UUID = UUID(), name: String, measurementType: MeasurementType, step: Double = 1.0, initialValue: String = "0", systemImage: String = "ruler.fill", categoryId: UUID) {
+    init(id: UUID = UUID(), name: String, measurementType: MeasurementType, step: Double = 1.0, systemImage: String = "ruler.fill", categoryId: UUID) {
         self.id = id
         self.name = name
         self.measurementType = measurementType
         self.step = step
-        self.initialValue = initialValue
         self.systemImage = systemImage
         self.categoryId = categoryId
         self.measurements = []
@@ -156,28 +155,28 @@ class StatDefinitionStore {
         
         let defaults: [StatDefinition] = [
             // Body measurements
-            StatDefinition(name: "Height", measurementType: .decimal, step: 0.5, initialValue: "180", systemImage: "arrow.up.and.down", categoryId: bodyCategory.id),
-            StatDefinition(name: "Weight", measurementType: .decimal, step: 0.1, initialValue: "75", systemImage: "scalemass", categoryId: bodyCategory.id),
-            StatDefinition(name: "Waist", measurementType: .decimal, step: 0.5, initialValue: "80", systemImage: "circle.dashed", categoryId: bodyCategory.id),
-            StatDefinition(name: "Chest", measurementType: .decimal, step: 0.5, initialValue: "100", systemImage: "person.crop.square.filled.and.at.rectangle", categoryId: bodyCategory.id),
-            StatDefinition(name: "Hips", measurementType: .decimal, step: 0.5, initialValue: "95", systemImage: "figure.stand", categoryId: bodyCategory.id),
-            StatDefinition(name: "Shoulders", measurementType: .decimal, step: 0.5, initialValue: "45", systemImage: "person.fill", categoryId: bodyCategory.id),
-            StatDefinition(name: "Neck", measurementType: .decimal, step: 0.5, initialValue: "38", systemImage: "person.crop.circle.badge", categoryId: bodyCategory.id),
-            StatDefinition(name: "Biceps", measurementType: .decimal, step: 0.5, initialValue: "32", systemImage: "figure.arms.open", categoryId: bodyCategory.id),
+            StatDefinition(name: "Height", measurementType: .decimal, step: 0.5,  systemImage: "arrow.up.and.down", categoryId: bodyCategory.id),
+            StatDefinition(name: "Weight", measurementType: .decimal, step: 0.1, systemImage: "scalemass", categoryId: bodyCategory.id),
+            StatDefinition(name: "Waist", measurementType: .decimal, step: 0.5, systemImage: "circle.dashed", categoryId: bodyCategory.id),
+            StatDefinition(name: "Chest", measurementType: .decimal, step: 0.5,  systemImage: "person.crop.square.filled.and.at.rectangle", categoryId: bodyCategory.id),
+            StatDefinition(name: "Hips", measurementType: .decimal, step: 0.5, systemImage: "figure.stand", categoryId: bodyCategory.id),
+            StatDefinition(name: "Shoulders", measurementType: .decimal, step: 0.5, systemImage: "person.fill", categoryId: bodyCategory.id),
+            StatDefinition(name: "Neck", measurementType: .decimal, step: 0.5, systemImage: "person.crop.circle.badge", categoryId: bodyCategory.id),
+            StatDefinition(name: "Biceps", measurementType: .decimal, step: 0.5, systemImage: "figure.arms.open", categoryId: bodyCategory.id),
             
             // Clothes sizes
-            StatDefinition(name: "T-shirt", measurementType: .text, initialValue: "L", systemImage: "tshirt", categoryId: clothesCategory.id),
-            StatDefinition(name: "Trousers", measurementType: .text, initialValue: "32", systemImage: "figure.dress.line.vertical.figure", categoryId: clothesCategory.id),
-            StatDefinition(name: "Jacket", measurementType: .text, initialValue: "XL", systemImage: "person.crop.square", categoryId: clothesCategory.id),
-            StatDefinition(name: "Shoe Size", measurementType: .text, initialValue: "42", systemImage: "shoe", categoryId: clothesCategory.id),
-            StatDefinition(name: "Hat/Cap", measurementType: .text, initialValue: "58", systemImage: "crown.fill", categoryId: clothesCategory.id),
-            StatDefinition(name: "Ring Size", measurementType: .text, initialValue: "18", systemImage: "circle", categoryId: clothesCategory.id),
+            StatDefinition(name: "T-shirt", measurementType: .text, systemImage: "tshirt", categoryId: clothesCategory.id),
+            StatDefinition(name: "Trousers", measurementType: .text, systemImage: "figure.dress.line.vertical.figure", categoryId: clothesCategory.id),
+            StatDefinition(name: "Jacket", measurementType: .text, systemImage: "person.crop.square", categoryId: clothesCategory.id),
+            StatDefinition(name: "Shoe Size", measurementType: .text, systemImage: "shoe", categoryId: clothesCategory.id),
+            StatDefinition(name: "Hat/Cap", measurementType: .text, systemImage: "crown.fill", categoryId: clothesCategory.id),
+            StatDefinition(name: "Ring Size", measurementType: .text, systemImage: "circle", categoryId: clothesCategory.id),
             
             // Health measurements
-            StatDefinition(name: "Blood Pressure", measurementType: .text, initialValue: "120/80", systemImage: "heart.fill", categoryId: healthCategory.id),
-            StatDefinition(name: "Blood Group", measurementType: .text, initialValue: "A+", systemImage: "drop.fill", categoryId: healthCategory.id),
-            StatDefinition(name: "BMI", measurementType: .decimal, step: 0.1, initialValue: "22.5", systemImage: "function", categoryId: healthCategory.id),
-            StatDefinition(name: "Body Fat %", measurementType: .decimal, step: 0.1, initialValue: "15", systemImage: "percent", categoryId: healthCategory.id)
+            StatDefinition(name: "Blood Pressure", measurementType: .text, systemImage: "heart.fill", categoryId: healthCategory.id),
+            StatDefinition(name: "Blood Group", measurementType: .text, systemImage: "drop.fill", categoryId: healthCategory.id),
+            StatDefinition(name: "BMI", measurementType: .decimal, step: 0.1, systemImage: "function", categoryId: healthCategory.id),
+            StatDefinition(name: "Body Fat %", measurementType: .decimal, step: 0.1, systemImage: "percent", categoryId: healthCategory.id)
         ]
         
         defaults.forEach { stat in
@@ -185,3 +184,10 @@ class StatDefinitionStore {
         }
     }
 } 
+
+extension Array where Element: StatMeasurement {
+    func lastByDate() -> StatMeasurement? {
+        guard !isEmpty else { return nil }
+        return self.max(by: { $0.date < $1.date })
+    }
+}

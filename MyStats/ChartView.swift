@@ -157,5 +157,5 @@ struct ChartView: View {
                              StatMeasurement(id: UUID(), date: Date().addingTimeInterval(30), value: 10),
                              StatMeasurement(id: UUID(), date: Date().addingTimeInterval(35), value: 30)])
         .frame(height: 300)
-        .border(.black, width: 4)
+//        .border(.black, width: 4)
 }

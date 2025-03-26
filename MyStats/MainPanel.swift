@@ -17,7 +17,6 @@ struct MainPanel: View {
     @State private var showingAddStat = false
     @State private var newPersonName = ""
     @State private var searchText = ""
-    @State private var isSearching = false
     @State private var scrollOffset: CGFloat = 0
     
     var body: some View {
@@ -29,9 +28,6 @@ struct MainPanel: View {
                         description: Text("Add a person to start tracking their stats")
                     )
                 } else {
-                    if isSearching {
-                        searchField
-                    }
                     personPicker
                     Spacer()
                     if let personId = selectedPersonId {
@@ -42,18 +38,6 @@ struct MainPanel: View {
             .navigationTitle(LocalizedStringKey("My Stats"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                if !people.isEmpty {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button(action: { 
-                            withAnimation {
-                                isSearching.toggle()
-                            }
-                        }) {
-                            Image(systemName: "magnifyingglass")
-                        }
-                    }
-                }
-                
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: { showingAddPerson = true }) {
                         Image(systemName: "person.badge.plus")
@@ -145,13 +129,13 @@ struct MainPanel: View {
         return person.stats.map { $0.name }
     }
     
-    private var statValues: [String: (value: String, image: String)] {
-        var values: [String: (value: String, image: String)] = [:]
-        for stat in person.stats {
-            values[stat.name] = (stat.initialValue, stat.systemImage)
-        }
-        return values
-    }
+//    private var statValues: [String: (value: String, image: String)] {
+//        var values: [String: (value: String, image: String)] = [:]
+//        for stat in person.stats {
+//            values[stat.name] = (stat.systemImage)
+//        }
+//        return values
+//    }
     
     private var filteredStats: [String] {
         if searchText.count < 1 {
@@ -288,14 +272,19 @@ struct MainPanel: View {
     
     private func getLatestValue(for stat: StatDefinition) -> String {
         guard let lastMeasurement = stat.measurements.last else {
-            return stat.initialValue
+            switch stat.measurementType {
+            case .text:
+                return stat.name
+            case .integer:
+                return "0"
+            case .decimal:
+                return "0.0"
+            @unknown default:
+                fatalError("Unsupported measurement type")
+            }
         }
         
-        if stat.measurementType == .text {
-            return lastMeasurement.textValue ?? stat.initialValue
-        } else {
-            return String(format: "%.1f", lastMeasurement.value)
-        }
+        return lastMeasurement.textValue ?? "No value"
     }
     
     private var statStore: StatDefinitionStore {

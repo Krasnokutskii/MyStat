@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-
-    },
     "Add" : {
       "localizations" : {
         "en" : {
@@ -23,20 +20,6 @@
           }
         }
       }
-    },
-    "Add Category" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Добавить категорию"
-          }
-        }
-      }
-    },
-    "Add Measurement" : {
-
     },
     "Add Person" : {
 
@@ -85,25 +68,10 @@
     "Delete" : {
 
     },
-    "Enter a name for the new category" : {
-      "comment" : "Введите имя для новой категории",
-      "extractionState" : "stale",
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Введите имя для новой категории"
-          }
-        }
-      }
-    },
     "History" : {
 
     },
     "Icon" : {
-
-    },
-    "Initial Value" : {
 
     },
     "Measurement Settings" : {
@@ -121,6 +89,9 @@
     "No People" : {
 
     },
+    "Now" : {
+
+    },
     "Person Name" : {
 
     },
@@ -131,6 +102,9 @@
 
     },
     "Select Icon" : {
+
+    },
+    "Set Value" : {
 
     },
     "Stat Name" : {

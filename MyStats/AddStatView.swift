@@ -11,7 +11,7 @@ struct AddStatView: View {
     @State private var statName = ""
     @State private var measurementType = MeasurementType.decimal
     @State private var step = "1.0"
-    @State private var initialValue = "0"
+    //@State private var initialValue = "0"
     @State private var selectedImage = "ruler.fill"
     @State private var selectedCategoryId: UUID?
     @State private var showingImagePicker = false
@@ -51,13 +51,6 @@ struct AddStatView: View {
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
                         }
-                    }
-                    
-                    HStack {
-                        Text("Initial Value")
-                        TextField("Initial Value", text: $initialValue)
-                            .keyboardType(measurementType == .text ? .default : .decimalPad)
-                            .multilineTextAlignment(.trailing)
                     }
                 }
                 
@@ -127,20 +120,17 @@ struct AddStatView: View {
     private var isValid: Bool {
         !statName.isEmpty && 
         selectedCategoryId != nil &&
-        !initialValue.isEmpty &&
         (measurementType == .text || Double(step) != nil)
     }
     
     private func addStat() {
         guard let categoryId = selectedCategoryId else { return }
         
-        let stepValue = measurementType == .text ? 1.0 : Double(step) ?? 1.0
+        //let stepValue = measurementType == .text ? 1.0 : Double(step) ?? 1.0
         
         let newStat = StatDefinition(
             name: statName,
             measurementType: measurementType,
-            step: stepValue,
-            initialValue: initialValue,
             systemImage: selectedImage,
             categoryId: categoryId
         )
