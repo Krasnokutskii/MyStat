@@ -79,10 +79,10 @@ struct MainPanel: View {
         let person = Person(name: name)
         
         // Link default person, categories, stats
-        let stats = [StatDefinition(name: "wight", measurementType: .decimal, categoryId: UUID()),
-                     StatDefinition(name: "height", measurementType: .decimal, categoryId: UUID()),
-                     StatDefinition(name: "weigst", measurementType: .decimal, categoryId: UUID()),
-                     StatDefinition(name: "arm", measurementType: .decimal, categoryId: UUID()),]
+        let stats = [StatDefinition(name: "Wight", measurementType: .decimal, categoryId: UUID()),
+                     StatDefinition(name: "Height", measurementType: .decimal, categoryId: UUID()),
+                     StatDefinition(name: "Weight", measurementType: .decimal, categoryId: UUID()),
+                     StatDefinition(name: "Arm", measurementType: .decimal, categoryId: UUID()),]
         person.categories = categories
         person.stats = stats
         categories.forEach { category in

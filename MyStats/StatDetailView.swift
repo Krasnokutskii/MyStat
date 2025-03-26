@@ -4,11 +4,15 @@ import SwiftData
 
 struct StatDetailView: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.editMode) var editMode
     let personId: UUID
     let statDefinition: StatDefinition
     @State private var newValue = ""
     @State private var selectedDate = Date()
+    @State private var showDatePicker = false {
+        didSet {
+            // here
+        }
+    }
     
     var body: some View {
         List {
@@ -41,11 +45,6 @@ struct StatDetailView: View {
                 Section(header: Text("Statistics")) {
                     statistics
                 }
-            }
-        }
-        .toolbar {
-            if editMode?.wrappedValue == .active {
-                EditButton()
             }
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -92,19 +91,38 @@ struct StatDetailView: View {
         }
     }
     
+    private var formattedMonthAndDay: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM d HH:mm"
+        let formattedDate = formatter.string(from: Date())
+
+        // Ensure first letter is capitalized
+        return formattedDate.prefix(1).capitalized + formattedDate.dropFirst()
+    }
+    
     private var addNewMeasurement: some View {
         VStack(spacing: 12) {
+            if showDatePicker {
+                HStack {
+                    Spacer()
+                    Button("Done") {
+                        showDatePicker = false
+                    }
+                }
+                .padding(8)
+            }
             HStack {
                 TextField("New Value", text: $newValue)
                     .keyboardType(statDefinition.measurementType == .text ? .default : .decimalPad)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
             }
-            if editMode?.wrappedValue == .inactive {
+            if !showDatePicker {
                 HStack {
-                    Text(Date.now.formatted())
+                    Text(formattedMonthAndDay)
                     Spacer()
                     Button("Edit") {
-                        editMode?.wrappedValue = .active
+#warning("whole view action works together with the button action, so this is not needed")
+                        showDatePicker = true
                     }
                 }
                 .padding(8)
