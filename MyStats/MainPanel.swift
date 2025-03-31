@@ -8,19 +8,36 @@
 import SwiftUI
 import SwiftData
 
+enum MainPanelDestination: Identifiable, Hashable {
+    case addPerson
+    case showStatView(stat: StatDefinition)
+    case addStat
+    var id: String {
+        switch self {
+        case .addPerson:
+            return "addPerson"
+        case .showStatView(let stat):
+            return "showStatView-\(stat.id)"
+        case .addStat:
+            return "addStat"
+        }
+    }
+}
+
 struct MainPanel: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var people: [Person]
     @Query private var categories: [StatCategory]
-    @State private var selectedPersonId: UUID?
+    @State private var selectedPersonId: UUID? // should not be optional !!!
     @State private var showingAddPerson = false
-    @State private var showingAddStat = false
+    //@State private var showingAddStat = false
     @State private var newPersonName = ""
     @State private var searchText = ""
     @State private var scrollOffset: CGFloat = 0
+    @State private var path: [MainPanelDestination] = []
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path ) {
             VStack(spacing: 0) {
                 if people.isEmpty {
                     ContentUnavailableView("No People", 
@@ -28,8 +45,25 @@ struct MainPanel: View {
                         description: Text("Add a person to start tracking their stats")
                     )
                 } else {
-                    personPicker
+                    HStack (spacing: 2){
+                        Button(action: {
+                            path.append(.addPerson)
+                        }) {
+                            Image(systemName: "plus")
+                                .font(.system(size: 24))
+                        }
+                        .offset(y: 6)
+                        personPicker
+                    }
                     Spacer()
+                    HStack {
+                        Spacer()
+                        Button {
+                            path.append(.addStat)
+                        } label: {
+                            Text("Add new stat")
+                        }
+                    }
                     if let personId = selectedPersonId {
                         statsGrid(for: personId)
                     }
@@ -39,26 +73,42 @@ struct MainPanel: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: { showingAddPerson = true }) {
+                    Button(action: {
+                        path.append(.addPerson)
+                        showingAddPerson = true
+                    }) {
                         Image(systemName: "person.badge.plus")
                     }
                 }
                 
                 if selectedPersonId != nil {
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button(action: { showingAddStat = true }) {
+                        Button {
+                            path.append(.addStat)
+                            //showingAddStat = true
+                        }
+                        label: {
                             Image(systemName: "plus")
                         }
                     }
                 }
             }
-            .sheet(isPresented: $showingAddPerson) {
-                addPersonSheet
-            }
-            .sheet(isPresented: $showingAddStat) {
-                if let personId = selectedPersonId {
-                    AddStatView(personId: personId)
+            .navigationDestination(for: MainPanelDestination.self) { destanation in
+                switch destanation {
+                case .addPerson:
+                    addPersonSheet
+                    //Text("Add Person")
+                case .showStatView(let stat):
+                    if let personId = selectedPersonId {
+                        StatDetailView(personId: personId, statDefinition: stat)
+                    }
+                case .addStat:
+                    Text("heelo")
+                    if let personId = selectedPersonId {
+                        AddStatView(personId: personId)
+                    }
                 }
+                //addPersonSheet
             }
         }
     }
@@ -105,16 +155,8 @@ struct MainPanel: View {
                 ForEach(statsByCategory, id: \.0) { category, stats in
                     Section(header: categoryHeader(category)) {
                         ForEach(stats) { stat in
-                            NavigationLink(destination: StatDetailView(
-                                personId: personId,
-                                statDefinition: stat
-                            )) {
-                                StatItemView(
-                                    title: stat.name,
-                                    value: getLatestValue(for: stat),
-                                    systemImageName: stat.systemImage
-                                )
-                            }
+                           
+                            StatItemView(stat: stat, path: $path)
                         }
                     }
                 }
@@ -128,14 +170,6 @@ struct MainPanel: View {
     private var statsExample: [String] {
         return person.stats.map { $0.name }
     }
-    
-//    private var statValues: [String: (value: String, image: String)] {
-//        var values: [String: (value: String, image: String)] = [:]
-//        for stat in person.stats {
-//            values[stat.name] = (stat.systemImage)
-//        }
-//        return values
-//    }
     
     private var filteredStats: [String] {
         if searchText.count < 1 {
@@ -174,15 +208,6 @@ struct MainPanel: View {
         .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
             scrollOffset = value
         }
-        
-//        if scrollOffset < -16 {
-//            Text("My Stats")
-//                .font(.headline)
-//                .frame(maxWidth: .infinity)
-//                .padding(.vertical, 8)
-//                .background(Color(UIColor.systemBackground).opacity(0.9))
-//                .transition(.move(edge: .top))
-//        }
     }
     
     private var searchField: some View {
@@ -212,44 +237,42 @@ struct MainPanel: View {
     }
     
     private var addPersonSheet: some View {
-        NavigationStack {
+        //NavigationStack {
             Form {
                 TextField("Person Name", text: $newPersonName)
             }
             .navigationTitle("Add Person")
             .navigationBarItems(
-                leading: Button("Cancel") {
-                    showingAddPerson = false
-                },
                 trailing: Button("Add") {
                     if !newPersonName.isEmpty {
                         addNewPerson(name: newPersonName)
                     }
+                    path.removeLast()
                 }
             )
-        }
+       // }
     }
     
     // MARK: - Helper Views
     
-    private func personButton(for person: Person) -> some View {
-        Button(action: {
-            selectedPersonId = person.id
-        }) {
-            Text(person.name)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-                .background(
-                    selectedPersonId == person.id ?
-                    Color.blue : Color.gray.opacity(0.2)
-                )
-                .foregroundColor(
-                    selectedPersonId == person.id ?
-                    .white : .primary
-                )
-                .cornerRadius(20)
-        }
-    }
+//    private func personButton(for person: Person) -> some View {
+//        Button(action: {
+//            selectedPersonId = person.id
+//        }) {
+//            Text(person.name)
+//                .padding(.horizontal, 16)
+//                .padding(.vertical, 8)
+//                .background(
+//                    selectedPersonId == person.id ?
+//                    Color.blue : Color.gray.opacity(0.2)
+//                )
+//                .foregroundColor(
+//                    selectedPersonId == person.id ?
+//                    .white : .primary
+//                )
+//                .cornerRadius(20)
+//        }
+//    }
     
     private var addPersonButton: some View {
         Button(action: {
@@ -270,6 +293,49 @@ struct MainPanel: View {
     
     // MARK: - Helper Methods
     
+    private var statStore: StatDefinitionStore {
+        StatDefinitionStore(modelContext: modelContext)
+    }
+    
+    private func deletePerson(_ person: Person) {
+        if person.id == selectedPersonId {
+            selectedPersonId = people.first(where: { $0.id != person.id })?.id
+        }
+        modelContext.delete(person)
+    }
+}
+
+// Custom view for stat item
+struct StatItemView: View {
+    let stat: StatDefinition
+    @Binding var path: [MainPanelDestination]
+    var body: some View {
+        VStack {
+            Image(systemName: stat.systemImage)
+                .font(.system(size: 30))
+                .foregroundColor(.blue)
+            
+            Text(getLatestValue(for: stat))
+                .font(.system(size: 32, weight: .bold))
+                .foregroundColor(.primary)
+            
+            Text(stat.name)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 120)
+        .background(Color.blue.opacity(0.1))
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+        )
+        .onTapGesture {
+            path.append(.showStatView(stat: stat))
+        }
+    }
+    
     private func getLatestValue(for stat: StatDefinition) -> String {
         guard let lastMeasurement = stat.measurements.last else {
             switch stat.measurementType {
@@ -285,48 +351,6 @@ struct MainPanel: View {
         }
         
         return lastMeasurement.textValue ?? "No value"
-    }
-    
-    private var statStore: StatDefinitionStore {
-        StatDefinitionStore(modelContext: modelContext)
-    }
-    
-    private func deletePerson(_ person: Person) {
-        if person.id == selectedPersonId {
-            selectedPersonId = people.first(where: { $0.id != person.id })?.id
-        }
-        modelContext.delete(person)
-    }
-}
-
-// Custom view for stat item
-struct StatItemView: View {
-    let title: String
-    let value: String
-    let systemImageName: String
-    
-    var body: some View {
-        VStack {
-            Image(systemName: systemImageName)
-                .font(.system(size: 30))
-                .foregroundColor(.blue)
-            
-            Text(value)
-                .font(.system(size: 32, weight: .bold))
-                .foregroundColor(.primary)
-            
-            Text(title)
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity)
-        .frame(height: 120)
-        .background(Color.blue.opacity(0.1))
-        .cornerRadius(12)
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.blue.opacity(0.3), lineWidth: 1)
-        )
     }
 }
 

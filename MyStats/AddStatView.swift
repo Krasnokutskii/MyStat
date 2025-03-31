@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct AddStatView: View {
-    @Environment(\.dismiss) private var dismiss
+    //@Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Query private var categories: [StatCategory]
     
@@ -23,7 +23,6 @@ struct AddStatView: View {
     ]
     
     var body: some View {
-        NavigationStack {
             Form {
                 Section("Basic Information") {
                     TextField("Stat Name", text: $statName)
@@ -55,7 +54,9 @@ struct AddStatView: View {
                 }
                 
                 Section("Icon") {
-                    Button(action: { showingImagePicker = true }) {
+                    Button {
+                        showingImagePicker = true
+                    } label: {
                         HStack {
                             Image(systemName: selectedImage)
                                 .font(.title2)
@@ -69,14 +70,12 @@ struct AddStatView: View {
                     }
                 }
             }
-            .navigationTitle("New Stat")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
+//                ToolbarItem(placement: .cancellationAction) {
+////                    Button("Cancel") {
+////                        dismiss()
+////                    }
+//                }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Add") {
                         addStat()
@@ -114,7 +113,6 @@ struct AddStatView: View {
                     }
                 }
             }
-        }
     }
     
     private var isValid: Bool {
@@ -143,6 +141,6 @@ struct AddStatView: View {
             person.stats.append(newStat)
         }
         
-        dismiss()
+        //dismiss()
     }
 } 

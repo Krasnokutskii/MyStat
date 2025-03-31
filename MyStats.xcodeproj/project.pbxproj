@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E6745BED2D6528BC000800D3 /* StatMeasurementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6745BEC2D6528BC000800D3 /* StatMeasurementModel.swift */; };
 		E6745BEF2D65294A000800D3 /* StatDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6745BEE2D65294A000800D3 /* StatDetailView.swift */; };
 		E6745BF72D65E39A000800D3 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6745BF62D65E39A000800D3 /* ChartView.swift */; };
 		E6A82D112D4B66C2009995C9 /* AddStatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A82D102D4B66C2009995C9 /* AddStatView.swift */; };
@@ -17,6 +16,7 @@
 		E6EFCEAA2D45547E008FF9CE /* MyStatsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EFCEA92D45547E008FF9CE /* MyStatsApp.swift */; };
 		E6EFCEAE2D45547F008FF9CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E6EFCEAD2D45547F008FF9CE /* Assets.xcassets */; };
 		E6EFCEB82D45549A008FF9CE /* MainPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EFCEB72D45549A008FF9CE /* MainPanel.swift */; };
+		E6FA18DD2D9859DF0093EA02 /* AddNewMeasurementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FA18DC2D9859DF0093EA02 /* AddNewMeasurementView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +31,7 @@
 		E6EFCEA92D45547E008FF9CE /* MyStatsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyStatsApp.swift; sourceTree = "<group>"; };
 		E6EFCEAD2D45547F008FF9CE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E6EFCEB72D45549A008FF9CE /* MainPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPanel.swift; sourceTree = "<group>"; };
+		E6FA18DC2D9859DF0093EA02 /* AddNewMeasurementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewMeasurementView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -72,16 +73,25 @@
 				E6A82D102D4B66C2009995C9 /* AddStatView.swift */,
 				E6EFCEB72D45549A008FF9CE /* MainPanel.swift */,
 				E6A82D182D4C4B26009995C9 /* PersonButton.swift */,
-				E6A82D162D4B73AC009995C9 /* StatMeasurementModel.swift */,
-				E6A82D122D4B6736009995C9 /* StatDefinitionModel.swift */,
-				E6745BEC2D6528BC000800D3 /* StatMeasurementModel.swift */,
+				E6FA18DC2D9859DF0093EA02 /* AddNewMeasurementView.swift */,
 				E6745BEE2D65294A000800D3 /* StatDetailView.swift */,
 				E6745BF62D65E39A000800D3 /* ChartView.swift */,
+				E6FA18DE2D985C070093EA02 /* Models */,
 				E6D3B6BC2D649C8D00EDE847 /* Resources */,
 				E6EFCEAD2D45547F008FF9CE /* Assets.xcassets */,
 				E6745BF42D652957000800D3 /* Preview Content */,
 			);
 			path = MyStats;
+			sourceTree = "<group>";
+		};
+		E6FA18DE2D985C070093EA02 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E6A82D162D4B73AC009995C9 /* StatMeasurementModel.swift */,
+				E6A82D122D4B6736009995C9 /* StatDefinitionModel.swift */,
+				E6745BEC2D6528BC000800D3 /* StatMeasurementModel.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -116,7 +126,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					E6EFCEA52D45547E008FF9CE = {
 						CreatedOnToolsVersion = 15.4;
@@ -131,6 +141,7 @@
 				en,
 				ru,
 				sr,
+				Base,
 			);
 			mainGroup = E6EFCE9D2D45547E008FF9CE;
 			productRefGroup = E6EFCEA72D45547E008FF9CE /* Products */;
@@ -159,12 +170,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6A82D172D4B73AC009995C9 /* StatMeasurementModel.swift in Sources */,
+				E6FA18DD2D9859DF0093EA02 /* AddNewMeasurementView.swift in Sources */,
 				E6745BEF2D65294A000800D3 /* StatDetailView.swift in Sources */,
 				E6A82D132D4B6736009995C9 /* StatDefinitionModel.swift in Sources */,
 				E6EFCEAA2D45547E008FF9CE /* MyStatsApp.swift in Sources */,
 				E6A82D192D4C4B26009995C9 /* PersonButton.swift in Sources */,
 				E6745BF72D65E39A000800D3 /* ChartView.swift in Sources */,
-				E6745BED2D6528BC000800D3 /* StatMeasurementModel.swift in Sources */,
 				E6EFCEB82D45549A008FF9CE /* MainPanel.swift in Sources */,
 				E6A82D112D4B66C2009995C9 /* AddStatView.swift in Sources */,
 			);
@@ -178,6 +189,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -242,6 +254,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -305,11 +318,14 @@
 				DEVELOPMENT_TEAM = WFD78527Q4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "My sizes";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -334,11 +350,14 @@
 				DEVELOPMENT_TEAM = WFD78527Q4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "My sizes";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

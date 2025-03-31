@@ -7,48 +7,55 @@ struct StatDetailView: View {
     let personId: UUID
     let statDefinition: StatDefinition
     @State private var newValue = ""
-    @State private var selectedDate = Date()
-    @State private var showDatePicker = false {
-        didSet {
-            // here
-        }
-    }
     
     var body: some View {
-        List {
-            Section {
-                headerView
-            }
-            // Chart Section
-            if statDefinition.measurementType != .text && statDefinition.measurements.count > 1 {
-                Section {
-                    ChartView(measurements: statDefinition.measurements.sorted(by: { $0.date < $1.date }))
-                        .frame(height: 200)
-                        .padding(.vertical)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 40) {
+                    
+                    headerView
+                        .frame(height: 100)
+                        .padding(20)
+                    
+                    AddNewMeasurementView(statDefinition: statDefinition)
+                    
+                    if statDefinition.measurementType != .text && statDefinition.measurements.count > 1 {
+                        VStack(alignment: .leading, spacing: 10) {
+                            ChartView(measurements: statDefinition.measurements.sorted(by: { $0.date < $1.date }))
+                                .frame(height: 200)
+                                .padding(.vertical)
+                        }
+                        .padding()
+                        .background(Color(UIColor.systemGroupedBackground))
+                        .cornerRadius(10)
+                    }
+                    
+                    // History Section
+                    if !statDefinition.measurements.isEmpty {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("History")
+                                .font(.headline)
+                            history
+                        }
+                        .padding()
+                        .background(Color(UIColor.systemGroupedBackground))
+                        .cornerRadius(10)
+                    }
+                    
+                    // Stats Section
+                    if statDefinition.measurementType != .text && statDefinition.measurements.count > 1 {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Statistics")
+                                .font(.headline)
+                            statistics
+                        }
+                        .padding()
+                        .background(Color(UIColor.systemGroupedBackground))
+                        .cornerRadius(10)
+                    }
                 }
-            }
-            
-            // Add New Measurement Section
-            Section {
-                addNewMeasurement
-            }
-            
-            // History Section
-            if !statDefinition.measurements.isEmpty {
-                Section(header: Text("History")) {
-                    history
-                }
-            }
-            
-            // Stats Section
-            if statDefinition.measurementType != .text && statDefinition.measurements.count > 1 {
-                Section(header: Text("Statistics")) {
-                    statistics
-                }
+                .padding()
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
-    }
     
     @ViewBuilder
     private var statistics: some View {
@@ -100,66 +107,14 @@ struct StatDetailView: View {
         return formattedDate.prefix(1).capitalized + formattedDate.dropFirst()
     }
     
-    private var addNewMeasurement: some View {
-        VStack(spacing: 12) {
-            if showDatePicker {
-                HStack {
-                    Spacer()
-                    Button("Done") {
-                        showDatePicker = false
-                    }
-                }
-                .padding(8)
-            }
-            HStack {
-                TextField("New Value", text: $newValue)
-                    .keyboardType(statDefinition.measurementType == .text ? .default : .decimalPad)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-            }
-            if !showDatePicker {
-                HStack {
-                    Text(formattedMonthAndDay)
-                    Spacer()
-                    Button("Edit") {
-#warning("whole view action works together with the button action, so this is not needed")
-                        showDatePicker = true
-                    }
-                }
-                .padding(8)
-            } else {
-                    DatePicker("Date", selection: $selectedDate, displayedComponents: [.date, .hourAndMinute])
-                        .datePickerStyle(.graphical)
-            }
-            
-            if statDefinition.measurementType == .text {
-                // Single button for text measurements
-                Button(action: setMeasurement) {
-                    Text("Set Value")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                .disabled(newValue.isEmpty)
-            } else {
-                // Two buttons for numeric measurements
-                HStack(spacing: 12) {
-                    Button(action: setMeasurement) {
-                        Text("Set Value")
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.orange)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    .disabled(newValue.isEmpty)
-                }
-            }
-        }
-        .padding(.vertical, 8)
-    }
     private var headerView: some View {
+        ZStack {
+            // Background with half-transparent blue color
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.blue.opacity(0.1)) // 50% transparency
+                .frame(maxWidth: .infinity) // Expands width
+                .padding(.horizontal) // Adds some space on the sides
+
             VStack(spacing: 16) {
                 Image(systemName: statDefinition.systemImage)
                     .font(.system(size: 40))
@@ -182,7 +137,9 @@ struct StatDetailView: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical)
+        }
     }
+
     
     private func formatValue(_ measurement: StatMeasurement) -> String {
         if statDefinition.measurementType == .text {
@@ -211,17 +168,6 @@ struct StatDetailView: View {
             return nil
         }
         return sortedMeasurements[index + 1]
-    }
-    
-    private func setMeasurement() {
-        let date = selectedDate
-        let measurement = StatMeasurement(
-            date: date,
-            value: Double(newValue) ?? 0,
-            textValue: statDefinition.measurementType == .text ? newValue : nil
-        )
-        statDefinition.measurements.append(measurement)
-        newValue = ""
     }
     
     private func deleteMeasurement(_ measurement: StatMeasurement) {

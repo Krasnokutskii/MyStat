@@ -21,6 +21,9 @@
         }
       }
     },
+    "Add new stat" : {
+
+    },
     "Add Person" : {
 
     },
@@ -68,10 +71,7 @@
     "Delete" : {
 
     },
-    "Done" : {
-
-    },
-    "Edit" : {
+    "heelo" : {
 
     },
     "History" : {
@@ -84,9 +84,6 @@
 
     },
     "My Stats" : {
-
-    },
-    "New Stat" : {
 
     },
     "New Value" : {
@@ -102,6 +99,9 @@
 
     },
     "Select Category" : {
+
+    },
+    "Select Date" : {
 
     },
     "Select Icon" : {
