@@ -2,6 +2,7 @@
   "sourceLanguage" : "en",
   "strings" : {
     "Add" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -21,10 +22,10 @@
         }
       }
     },
-    "Add new stat" : {
+    "Add Person" : {
 
     },
-    "Add Person" : {
+    "Add Stat" : {
 
     },
     "AppName" : {
@@ -45,9 +46,6 @@
         }
       }
     },
-    "Basic Information" : {
-
-    },
     "Cancel" : {
       "comment" : "Закрыть",
       "localizations" : {
@@ -59,7 +57,13 @@
         }
       }
     },
-    "Category" : {
+    "Choose Avatar" : {
+
+    },
+    "Collapse" : {
+
+    },
+    "Create Profile" : {
 
     },
     "Current:" : {
@@ -71,19 +75,22 @@
     "Delete" : {
 
     },
-    "heelo" : {
+    "Done" : {
+
+    },
+    "Expand" : {
 
     },
     "History" : {
 
     },
-    "Icon" : {
-
-    },
-    "Measurement Settings" : {
+    "Invalid Input" : {
 
     },
     "My Stats" : {
+
+    },
+    "New Stat" : {
 
     },
     "New Value" : {
@@ -92,13 +99,16 @@
     "No People" : {
 
     },
-    "Person Name" : {
+    "Number" : {
+
+    },
+    "OK" : {
+
+    },
+    "Please enter valid numbers for weight, height, and age." : {
 
     },
     "Search" : {
-
-    },
-    "Select Category" : {
 
     },
     "Select Date" : {
@@ -110,19 +120,10 @@
     "Set Value" : {
 
     },
-    "Stat Name" : {
-
-    },
     "Statistics" : {
 
     },
-    "Step" : {
-
-    },
-    "Step Value" : {
-
-    },
-    "Type" : {
+    "Text" : {
 
     },
     "Value" : {

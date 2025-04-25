@@ -22,7 +22,6 @@ struct PersonButton: View {
                 )
                 .onTapGesture {
                     action()
-                    print("Button tapped")
                 }
                 .onLongPressGesture(minimumDuration: 1.0) {
                     isInEditMode.toggle()
@@ -42,7 +41,7 @@ struct PersonButton: View {
 }
 
 #Preview {
-        PersonButton(name: "John", isSelected: true, isInEditMode: .constant(true), action: {}, onDelete: {})
+    PersonButton(name: "John", isSelected: true, isInEditMode: .constant(true), action: {}, onDelete: {})
         .frame(width: 150, height: 10)
     
-} 
+}

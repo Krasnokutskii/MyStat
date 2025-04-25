@@ -9,19 +9,15 @@ import SwiftUI
 
 struct AddNewMeasurementView: View {
     @State private var newValue: String = ""
-    @State private var showDatePicker: Bool = false {
-        didSet {
-            // Here
-        }
-    }
+    @State private var showDatePicker: Bool = false
     @State private var selectedDate: Date = Date()
-    @State private var appliedDate: Date?
+    @State private var userDidPickDate: Bool = false  // 🔸 NEW FLAG
 
-    var statDefinition: StatDefinition //= StatDefinition(measurementType: .number) // Example
+    var statDefinition: StatDefinition
 
-    private var formattedMonthAndDay: String {
+    private var formattedMonthDayYear: String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMM d"
+        formatter.dateFormat = "MMM d, yyyy"
         return formatter.string(from: selectedDate)
     }
 
@@ -29,33 +25,33 @@ struct AddNewMeasurementView: View {
         VStack(spacing: 12) {
             dateDisplay
             inputField
-//            if showDatePicker {
-//                //datePickerView
-//                //Text("test")
-//            }
+
             if showDatePicker {
-                            DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
-                                .datePickerStyle(.graphical)
-                                .transition(.opacity)
-                        }
+                DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                    .onChange(of: selectedDate) { _, _ in
+                        userDidPickDate = true
+                    }
+                    .datePickerStyle(.graphical)
+                    .transition(.opacity)
+            }
+
             Button {
                 setMeasurement()
             } label: {
                 Text("Set Value")
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(statDefinition.measurementType == .text ? Color.blue : Color.orange)
+                    .background(
+                        newValue.isEmpty
+                        ? Color.gray
+                        : (statDefinition.measurementType == .text ? Color.blue : Color.orange)
+                    )
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
+            .disabled(newValue.isEmpty)
         }
-        
-        .padding(.vertical, 8)
-    }
-
-    private var datePickerView: some View {
-        DatePicker("Date", selection: $selectedDate, displayedComponents: [.date, .hourAndMinute])
-                .datePickerStyle(.graphical)
+        .padding()
     }
 
     private var inputField: some View {
@@ -66,47 +62,34 @@ struct AddNewMeasurementView: View {
 
     private var dateDisplay: some View {
         HStack {
-            Button{
+            Button {
                 showDatePicker.toggle()
             } label: {
-                Text(formattedMonthAndDay)
+                Text(formattedMonthDayYear)
             }
             .buttonStyle(.borderedProminent)
             Spacer()
         }
-        .padding(8)
     }
 
-//    private var measurementButton: some View {
-//        Button {
-//            setMeasurement()
-//        } label: {
-//            Text("Set Value")
-//                .frame(maxWidth: .infinity)
-//                .padding()
-//                .background(statDefinition.measurementType == .text ? Color.blue : Color.orange)
-//                .foregroundColor(.white)
-//                .cornerRadius(10)
-//        }
-//    }
-    
     private func setMeasurement() {
-        let date = appliedDate != nil ? appliedDate : selectedDate
-        //let date = selectedDate
+        let finalDate = userDidPickDate ? selectedDate : Date()
+
         let measurement = StatMeasurement(
-            date: date!,
-            value: Double(newValue) ?? 0,
-            textValue: statDefinition.measurementType == .text ? newValue : nil
+            date: finalDate,
+            value: newValue
         )
+
         statDefinition.measurements.append(measurement)
         newValue = ""
+
+        // 🔸 Reset picker state
+        showDatePicker = false
+        userDidPickDate = false
+        selectedDate = Date()
     }
-    
-//    private func setMeasurement() {
-//        print("Measurement set: \(newValue)")
-//    }
 }
 
 #Preview {
-    AddNewMeasurementView(statDefinition: StatDefinition(name: "asdf", measurementType: .decimal, categoryId: UUID()))
+    AddNewMeasurementView(statDefinition: StatDefinition(name: "asdf", measurementType: .digit, category: StatCategory(name: "Body")))
 }

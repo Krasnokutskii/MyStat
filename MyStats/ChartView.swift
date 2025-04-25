@@ -47,7 +47,7 @@ struct ChartView: View {
     private func areaPlot(for measurement: StatMeasurement) -> some ChartContent {
         AreaMark(
             x: .value("Date", measurement.date),
-            y: .value("Value", measurement.value)
+            y: .value("Value", Double(measurement.value) ?? 0)
         )
         .interpolationMethod(.catmullRom)
         .foregroundStyle(
@@ -66,7 +66,7 @@ struct ChartView: View {
     private func lineMark(for measurement: StatMeasurement) -> some ChartContent {
         LineMark(
             x: .value("Date", measurement.date),
-            y: .value("Value", measurement.value)
+            y: .value("Value", Double(measurement.value) ?? 0)
         )
         .interpolationMethod(.catmullRom)
         .foregroundStyle(
@@ -82,7 +82,7 @@ struct ChartView: View {
     private func dotMark(for measurement: StatMeasurement) -> some ChartContent {
         PointMark(
             x: .value("Date", measurement.date),
-            y: .value("Value", measurement.value)
+            y: .value("Value", Double(measurement.value) ?? 0)
         )
         .foregroundStyle(.indigo.opacity(0.7))
         .symbolSize(28)
@@ -147,15 +147,14 @@ struct ChartView: View {
 } 
 
 #Preview {
-    ChartView(measurements: [StatMeasurement(id: UUID(), value: 10),
-                             StatMeasurement(id: UUID(),date: Date().addingTimeInterval(1),value: 20),
-                             StatMeasurement(id: UUID(), date: Date().addingTimeInterval(3), value: 150),
-                             StatMeasurement(id: UUID(), date: Date().addingTimeInterval(10), value: 400),
-                             StatMeasurement(id: UUID(), date: Date().addingTimeInterval(15), value: 50),
-                             StatMeasurement(id: UUID(), date: Date().addingTimeInterval(20), value: -700),
-                             StatMeasurement(id: UUID(), date: Date().addingTimeInterval(25), value: -90),
-                             StatMeasurement(id: UUID(), date: Date().addingTimeInterval(30), value: 10),
-                             StatMeasurement(id: UUID(), date: Date().addingTimeInterval(35), value: 30)])
+    ChartView(measurements: [StatMeasurement(id: UUID(), value: "10"),
+                             StatMeasurement(id: UUID(),date: Date().addingTimeInterval(1),value: "20"),
+                             StatMeasurement(id: UUID(), date: Date().addingTimeInterval(3), value: "150"),
+                             StatMeasurement(id: UUID(), date: Date().addingTimeInterval(10), value: "400"),
+                             StatMeasurement(id: UUID(), date: Date().addingTimeInterval(15), value: "50"),
+                             StatMeasurement(id: UUID(), date: Date().addingTimeInterval(20), value: "-700"),
+                             StatMeasurement(id: UUID(), date: Date().addingTimeInterval(25), value: "-90"),
+                             StatMeasurement(id: UUID(), date: Date().addingTimeInterval(30), value: "10"),
+                             StatMeasurement(id: UUID(), date: Date().addingTimeInterval(35), value: "30")])
         .frame(height: 300)
-//        .border(.black, width: 4)
 }

@@ -3,106 +3,153 @@ import Charts // Requires iOS 16+
 import SwiftData
 
 struct StatDetailView: View {
-    @Environment(\.modelContext) private var modelContext
-    let personId: UUID
+    let person: Person
     let statDefinition: StatDefinition
     @State private var newValue = ""
     
     var body: some View {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 40) {
-                    
-                    headerView
-                        .frame(height: 100)
-                        .padding(20)
-                    
+        ScrollView {
+            VStack(alignment: .leading, spacing: 40) {
+                
+                headerView
+                    .padding(20)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color.blue.opacity(0.1))
+                        .frame(maxWidth: .infinity)
                     AddNewMeasurementView(statDefinition: statDefinition)
-                    
-                    if statDefinition.measurementType != .text && statDefinition.measurements.count > 1 {
+                }
+                
+                if statDefinition.measurementType != .text && statDefinition.measurements.count > 1 {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color.blue.opacity(0.1))
+                            .frame(maxWidth: .infinity)
                         VStack(alignment: .leading, spacing: 10) {
-                            ChartView(measurements: statDefinition.measurements.sorted(by: { $0.date < $1.date }))
+                            ChartView(measurements: statDefinition.measurements)
                                 .frame(height: 200)
                                 .padding(.vertical)
                         }
                         .padding()
-                        .background(Color(UIColor.systemGroupedBackground))
-                        .cornerRadius(10)
                     }
-                    
-                    // History Section
-                    if !statDefinition.measurements.isEmpty {
+                }
+                
+                // History Section
+                if !statDefinition.measurements.isEmpty {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color.blue.opacity(0.1))
+                            .frame(maxWidth: .infinity)
                         VStack(alignment: .leading, spacing: 10) {
                             Text("History")
                                 .font(.headline)
                             history
                         }
                         .padding()
-                        .background(Color(UIColor.systemGroupedBackground))
-                        .cornerRadius(10)
                     }
-                    
-                    // Stats Section
-                    if statDefinition.measurementType != .text && statDefinition.measurements.count > 1 {
+                }
+                
+                // Stats Section
+                if statDefinition.measurementType != .text && statDefinition.measurements.count > 1 {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color.blue.opacity(0.1))
+                            .frame(maxWidth: .infinity)
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Statistics")
                                 .font(.headline)
                             statistics
                         }
                         .padding()
-                        .background(Color(UIColor.systemGroupedBackground))
-                        .cornerRadius(10)
                     }
                 }
-                .padding()
             }
+            .padding()
         }
+    }
     
     @ViewBuilder
     private var statistics: some View {
-        StatRow(title: "Average", value: calculateAverage())
-        StatRow(title: "Minimum", value: calculateMin())
-        StatRow(title: "Maximum", value: calculateMax())
+        if let avarage = calculateAverage() {
+            StatRow(title: "Average", value: avarage)
+        }
+        if let minimim = calculateMin(), let maximim = calculateMax() {
+            StatRow(title: "Minimum", value: minimim)
+            StatRow(title: "Maximum", value: maximim)
+        }
         if let trend = calculateTrend() {
             StatRow(title: "Trend", value: trend, showTrend: true)
         }
     }
     
+    @State private var showAllMeasurements = false
+    
     private var history: some View {
-        ForEach(statDefinition.measurements.sorted(by: { $0.date > $1.date })) { measurement in
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(formatValue(measurement))
-                        .font(.headline)
-                    Text(formatDate(measurement.date))
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+        VStack(alignment: .leading, spacing: 8) {
+            ForEach(displayedMeasurements) { statMeasurement in
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(formatValue(statMeasurement))
+                            .font(.headline)
+                        Text(formatDate(statMeasurement.date))
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    Spacer()
+                    
+                    if let previousMeasurement = getPreviousMeasurement(for: statMeasurement),
+                       statDefinition.measurementType != .text,
+                       let currentValue = Double(statMeasurement.value),
+                       let previousValue = Double(previousMeasurement.value) {
+                        
+                        let difference = currentValue - previousValue
+                        Text(formatDifference(difference))
+                            .font(.caption)
+                            .foregroundColor(difference >= 0 ? .green : .red)
+                    }
                 }
-                
-                Spacer()
-                
-                if let previousMeasurement = getPreviousMeasurement(for: measurement),
-                   statDefinition.measurementType != .text {
-                    let difference = measurement.value - previousMeasurement.value
-                    Text(formatDifference(difference))
-                        .font(.caption)
-                        .foregroundColor(difference >= 0 ? .green : .red)
+                .swipeActions(edge: .trailing) {
+                    Button(role: .destructive) {
+                        deleteMeasurement(statMeasurement)
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
                 }
             }
-            .swipeActions(edge: .trailing) {
-                Button(role: .destructive) {
-                    deleteMeasurement(measurement)
-                } label: {
-                    Label("Delete", systemImage: "trash")
+            
+            // Expand/Collapse Button
+            if statDefinition.measurements.count > 5 {
+                Button(action: {
+                    withAnimation {
+                        showAllMeasurements.toggle()
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: showAllMeasurements ? "chevron.up" : "chevron.down")
+                        Text(showAllMeasurements ? "Collapse" : "Expand")
+                            .font(.caption)
+                    }
+                    .foregroundColor(.blue)
+                    .padding(.top, 8)
                 }
             }
         }
     }
     
+    // Computed property to control displayed measurements
+    private var displayedMeasurements: [StatMeasurement] {
+        let measurements = statDefinition.sortedMeasurements
+        return showAllMeasurements ? measurements : Array(measurements.prefix(5))
+    }
+    
+    
+    
     private var formattedMonthAndDay: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM d HH:mm"
         let formattedDate = formatter.string(from: Date())
-
+        
         // Ensure first letter is capitalized
         return formattedDate.prefix(1).capitalized + formattedDate.dropFirst()
     }
@@ -114,7 +161,7 @@ struct StatDetailView: View {
                 .fill(Color.blue.opacity(0.1)) // 50% transparency
                 .frame(maxWidth: .infinity) // Expands width
                 .padding(.horizontal) // Adds some space on the sides
-
+            
             VStack(spacing: 16) {
                 Image(systemName: statDefinition.systemImage)
                     .font(.system(size: 40))
@@ -139,14 +186,10 @@ struct StatDetailView: View {
             .padding(.vertical)
         }
     }
-
+    
     
     private func formatValue(_ measurement: StatMeasurement) -> String {
-        if statDefinition.measurementType == .text {
-            return measurement.textValue ?? ""
-        } else {
-            return String(format: "%.1f", measurement.value)
-        }
+        return "\(measurement.value)"
     }
     
     private func formatDate(_ date: Date) -> String {
@@ -176,25 +219,36 @@ struct StatDetailView: View {
         }
     }
     
-    private func calculateAverage() -> Double {
-        let values = statDefinition.measurements.map { $0.value }
+    private func calculateAverage() -> Double? {
+        guard statDefinition.measurementType != .text else { return nil }
+        let values = statDefinition.measurements
+            .compactMap { Double($0.value)}
+        
         return values.reduce(0, +) / Double(values.count)
     }
     
-    private func calculateMin() -> Double {
-        statDefinition.measurements.map { $0.value }.min() ?? 0
+    private func calculateMin() -> Double? {
+        guard statDefinition.measurementType != .text else { return nil }
+        return statDefinition.measurements
+            .compactMap { Double($0.value)}.min() ?? 0
     }
     
-    private func calculateMax() -> Double {
-        statDefinition.measurements.map { $0.value }.max() ?? 0
+    private func calculateMax() -> Double? {
+        guard statDefinition.measurementType != .text else { return nil }
+        return statDefinition.measurements
+            .compactMap { Double($0.value)}.max() ?? 0
     }
     
     private func calculateTrend() -> Double? {
-        guard statDefinition.measurements.count >= 2 else { return nil }
+        guard statDefinition.measurementType != .text, statDefinition.measurements.count >= 2 else { return nil }
         let sortedMeasurements = statDefinition.measurements.sorted(by: { $0.date < $1.date })
-        let first = sortedMeasurements.first!.value
-        let last = sortedMeasurements.last!.value
-        return last - first
+        if let firstValue = sortedMeasurements.first?.value,
+           let lastValue = sortedMeasurements.last?.value,
+           let first = Double(firstValue),
+           let last = Double(lastValue) {
+            return last - first
+        }
+        return nil
     }
 }
 
@@ -218,5 +272,5 @@ struct StatRow: View {
 }
 
 #Preview {
-    StatDetailView(personId: UUID(), statDefinition: StatDefinition(id:UUID(), name: "Name", measurementType: MeasurementType.decimal, systemImage:"ruler.fill", categoryId: UUID()) )
+    StatDetailView(person: Person(name: "Dummy Person"), statDefinition: StatDefinition(id:UUID(), name: "Name", measurementType: MeasurementType.digit, systemImage:"ruler.fill", category: StatCategory(name: "Body")) )
 }

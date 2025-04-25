@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E64862372DB409B800893842 /* StatMesurementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64862362DB409B800893842 /* StatMesurementModel.swift */; };
 		E6745BEF2D65294A000800D3 /* StatDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6745BEE2D65294A000800D3 /* StatDetailView.swift */; };
 		E6745BF72D65E39A000800D3 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6745BF62D65E39A000800D3 /* ChartView.swift */; };
 		E6A82D112D4B66C2009995C9 /* AddStatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A82D102D4B66C2009995C9 /* AddStatView.swift */; };
 		E6A82D132D4B6736009995C9 /* StatDefinitionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A82D122D4B6736009995C9 /* StatDefinitionModel.swift */; };
-		E6A82D172D4B73AC009995C9 /* StatMeasurementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A82D162D4B73AC009995C9 /* StatMeasurementModel.swift */; };
 		E6A82D192D4C4B26009995C9 /* PersonButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A82D182D4C4B26009995C9 /* PersonButton.swift */; };
+		E6D329852DAFF41D007300B9 /* StatItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D329842DAFF41D007300B9 /* StatItemView.swift */; };
+		E6D329872DB0052E007300B9 /* AddPersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D329862DB0052E007300B9 /* AddPersonView.swift */; };
 		E6EFCEAA2D45547E008FF9CE /* MyStatsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EFCEA92D45547E008FF9CE /* MyStatsApp.swift */; };
 		E6EFCEAE2D45547F008FF9CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E6EFCEAD2D45547F008FF9CE /* Assets.xcassets */; };
 		E6EFCEB82D45549A008FF9CE /* MainPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EFCEB72D45549A008FF9CE /* MainPanel.swift */; };
@@ -20,13 +22,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E6745BEC2D6528BC000800D3 /* StatMeasurementModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatMeasurementModel.swift; sourceTree = "<group>"; };
+		E64862362DB409B800893842 /* StatMesurementModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatMesurementModel.swift; sourceTree = "<group>"; };
 		E6745BEE2D65294A000800D3 /* StatDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatDetailView.swift; sourceTree = "<group>"; };
 		E6745BF62D65E39A000800D3 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		E6A82D102D4B66C2009995C9 /* AddStatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddStatView.swift; sourceTree = "<group>"; };
 		E6A82D122D4B6736009995C9 /* StatDefinitionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatDefinitionModel.swift; sourceTree = "<group>"; };
-		E6A82D162D4B73AC009995C9 /* StatMeasurementModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatMeasurementModel.swift; sourceTree = "<group>"; };
 		E6A82D182D4C4B26009995C9 /* PersonButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonButton.swift; sourceTree = "<group>"; };
+		E6D329842DAFF41D007300B9 /* StatItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatItemView.swift; sourceTree = "<group>"; };
+		E6D329862DB0052E007300B9 /* AddPersonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPersonView.swift; sourceTree = "<group>"; };
 		E6EFCEA62D45547E008FF9CE /* MyStats.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyStats.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6EFCEA92D45547E008FF9CE /* MyStatsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyStatsApp.swift; sourceTree = "<group>"; };
 		E6EFCEAD2D45547F008FF9CE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -72,7 +75,9 @@
 				E6EFCEA92D45547E008FF9CE /* MyStatsApp.swift */,
 				E6A82D102D4B66C2009995C9 /* AddStatView.swift */,
 				E6EFCEB72D45549A008FF9CE /* MainPanel.swift */,
+				E6D329842DAFF41D007300B9 /* StatItemView.swift */,
 				E6A82D182D4C4B26009995C9 /* PersonButton.swift */,
+				E6D329862DB0052E007300B9 /* AddPersonView.swift */,
 				E6FA18DC2D9859DF0093EA02 /* AddNewMeasurementView.swift */,
 				E6745BEE2D65294A000800D3 /* StatDetailView.swift */,
 				E6745BF62D65E39A000800D3 /* ChartView.swift */,
@@ -87,9 +92,8 @@
 		E6FA18DE2D985C070093EA02 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				E6A82D162D4B73AC009995C9 /* StatMeasurementModel.swift */,
 				E6A82D122D4B6736009995C9 /* StatDefinitionModel.swift */,
-				E6745BEC2D6528BC000800D3 /* StatMeasurementModel.swift */,
+				E64862362DB409B800893842 /* StatMesurementModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -169,10 +173,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6A82D172D4B73AC009995C9 /* StatMeasurementModel.swift in Sources */,
+				E6D329852DAFF41D007300B9 /* StatItemView.swift in Sources */,
 				E6FA18DD2D9859DF0093EA02 /* AddNewMeasurementView.swift in Sources */,
 				E6745BEF2D65294A000800D3 /* StatDetailView.swift in Sources */,
 				E6A82D132D4B6736009995C9 /* StatDefinitionModel.swift in Sources */,
+				E6D329872DB0052E007300B9 /* AddPersonView.swift in Sources */,
+				E64862372DB409B800893842 /* StatMesurementModel.swift in Sources */,
 				E6EFCEAA2D45547E008FF9CE /* MyStatsApp.swift in Sources */,
 				E6A82D192D4C4B26009995C9 /* PersonButton.swift in Sources */,
 				E6745BF72D65E39A000800D3 /* ChartView.swift in Sources */,

@@ -6,33 +6,11 @@ import SwiftUI
 class StatCategory {
     var id: UUID
     var name: String
-    @Relationship(deleteRule: .nullify) var persons: [Person]
     
     init(id: UUID = UUID(), name: String) {
         self.id = id
         self.name = name
-        self.persons = []
     }
-    
-    static func createDefaultCategories(in modelContext: ModelContext) {
-        let defaults = [
-            StatCategory(name: "Body"),
-            StatCategory(name: "Clothes"),
-            StatCategory(name: "Health"),
-            StatCategory(name: "Gym")
-        ]
-        
-        defaults.forEach { category in
-            modelContext.insert(category)
-        }
-    }
-    
-    static let defaultCategoryNames = [
-        "Body",
-        "Clothes",
-        "Health",
-        "Gym"
-    ]
 }
 
 @Model
@@ -40,13 +18,31 @@ class Person {
     var id: UUID
     var name: String
     @Relationship(deleteRule: .cascade) var stats: [StatDefinition]
-    @Relationship(deleteRule: .nullify) var categories: [StatCategory]
+    @Relationship(deleteRule: .cascade) var categories: [StatCategory]
+    var avatarIcon: String? // Add this property to your Person model
     
-    init(id: UUID = UUID(), name: String) {
+    init(id: UUID = UUID(), name: String, avatar: String? = nil) {
         self.id = id
         self.name = name
         self.stats = []
         self.categories = []
+        self.avatarIcon = avatar
+    }
+    
+    func addStats(_ stats: [StatDefinition]) {
+        self.stats.append(contentsOf: stats)
+    }
+    
+    func addCategories(_ categories: [StatCategory]) {
+        self.categories.append(contentsOf: categories)
+    }
+    
+    var statsByCategory: [(String, [StatDefinition])] {
+        let grouped = Dictionary(grouping: stats) { stat in
+            stat.category?.name ?? "Other"
+        }
+        return grouped
+            .sorted { $0.key < $1.key }
     }
 }
 
@@ -56,25 +52,27 @@ class StatDefinition {
     var name: String
     var measurementType: MeasurementType
     var step: Double
-    //var initialValue: String
     var systemImage: String
-    var categoryId: UUID
+    @Relationship(deleteRule: .cascade) var category: StatCategory?
     @Relationship(deleteRule: .cascade) var measurements: [StatMeasurement]
     
-    init(id: UUID = UUID(), name: String, measurementType: MeasurementType, step: Double = 1.0, systemImage: String = "ruler.fill", categoryId: UUID) {
+    var sortedMeasurements: [StatMeasurement] {
+        measurements.sorted(by: { $0.date > $1.date })
+    }
+    
+    init(id: UUID = UUID(), name: String, measurementType: MeasurementType, step: Double = 1.0, systemImage: String = "ruler.fill", category: StatCategory) {
         self.id = id
         self.name = name
         self.measurementType = measurementType
         self.step = step
         self.systemImage = systemImage
-        self.categoryId = categoryId
+        self.category = category
         self.measurements = []
     }
 }
 
 enum MeasurementType: String, Codable, CaseIterable {
-    case integer = "Integer"
-    case decimal = "Decimal"
+    case digit = "Digit"
     case text = "Text"
 }
 
@@ -86,9 +84,6 @@ class StatDefinitionStore {
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
         loadCategories()
-        if categories.isEmpty {
-            addDefaultCategories()
-        }
     }
     
     private func loadCategories() {
@@ -97,19 +92,6 @@ class StatDefinitionStore {
         } catch {
             print("Failed to fetch categories: \(error)")
         }
-    }
-    
-    private func addDefaultCategories() {
-        let defaults = [
-            StatCategory(name: "Body"),
-            StatCategory(name: "Clothes"),
-            StatCategory(name: "Health"),
-            StatCategory(name: "Gym")
-        ]
-        defaults.forEach { category in
-            modelContext.insert(category)
-        }
-        categories = defaults
     }
     
     func addCategory(_ category: StatCategory) {
@@ -155,28 +137,28 @@ class StatDefinitionStore {
         
         let defaults: [StatDefinition] = [
             // Body measurements
-            StatDefinition(name: "Height", measurementType: .decimal, step: 0.5,  systemImage: "arrow.up.and.down", categoryId: bodyCategory.id),
-            StatDefinition(name: "Weight", measurementType: .decimal, step: 0.1, systemImage: "scalemass", categoryId: bodyCategory.id),
-            StatDefinition(name: "Waist", measurementType: .decimal, step: 0.5, systemImage: "circle.dashed", categoryId: bodyCategory.id),
-            StatDefinition(name: "Chest", measurementType: .decimal, step: 0.5,  systemImage: "person.crop.square.filled.and.at.rectangle", categoryId: bodyCategory.id),
-            StatDefinition(name: "Hips", measurementType: .decimal, step: 0.5, systemImage: "figure.stand", categoryId: bodyCategory.id),
-            StatDefinition(name: "Shoulders", measurementType: .decimal, step: 0.5, systemImage: "person.fill", categoryId: bodyCategory.id),
-            StatDefinition(name: "Neck", measurementType: .decimal, step: 0.5, systemImage: "person.crop.circle.badge", categoryId: bodyCategory.id),
-            StatDefinition(name: "Biceps", measurementType: .decimal, step: 0.5, systemImage: "figure.arms.open", categoryId: bodyCategory.id),
+            StatDefinition(name: "Height", measurementType: .digit, step: 0.5,  systemImage: "arrow.up.and.down", category: bodyCategory),
+            StatDefinition(name: "Weight", measurementType: .digit, step: 0.1, systemImage: "scalemass", category: bodyCategory),
+            StatDefinition(name: "Waist", measurementType: .digit, step: 0.5, systemImage: "circle.dashed", category: bodyCategory),
+            StatDefinition(name: "Chest", measurementType: .digit, step: 0.5,  systemImage: "person.crop.square.filled.and.at.rectangle", category: bodyCategory),
+            StatDefinition(name: "Hips", measurementType: .digit, step: 0.5, systemImage: "figure.stand", category: bodyCategory),
+            StatDefinition(name: "Shoulders", measurementType: .digit, step: 0.5, systemImage: "person.fill", category: bodyCategory),
+            StatDefinition(name: "Neck", measurementType: .digit, step: 0.5, systemImage: "person.crop.circle.badge", category: bodyCategory),
+            StatDefinition(name: "Biceps", measurementType: .digit, step: 0.5, systemImage: "figure.arms.open", category: bodyCategory),
             
             // Clothes sizes
-            StatDefinition(name: "T-shirt", measurementType: .text, systemImage: "tshirt", categoryId: clothesCategory.id),
-            StatDefinition(name: "Trousers", measurementType: .text, systemImage: "figure.dress.line.vertical.figure", categoryId: clothesCategory.id),
-            StatDefinition(name: "Jacket", measurementType: .text, systemImage: "person.crop.square", categoryId: clothesCategory.id),
-            StatDefinition(name: "Shoe Size", measurementType: .text, systemImage: "shoe", categoryId: clothesCategory.id),
-            StatDefinition(name: "Hat/Cap", measurementType: .text, systemImage: "crown.fill", categoryId: clothesCategory.id),
-            StatDefinition(name: "Ring Size", measurementType: .text, systemImage: "circle", categoryId: clothesCategory.id),
+            StatDefinition(name: "T-shirt", measurementType: .text, systemImage: "tshirt", category: clothesCategory),
+            StatDefinition(name: "Trousers", measurementType: .text, systemImage: "figure.dress.line.vertical.figure", category: clothesCategory),
+            StatDefinition(name: "Jacket", measurementType: .text, systemImage: "person.crop.square", category: clothesCategory),
+            StatDefinition(name: "Shoe Size", measurementType: .text, systemImage: "shoe", category: clothesCategory),
+            StatDefinition(name: "Hat/Cap", measurementType: .text, systemImage: "crown.fill", category: clothesCategory),
+            StatDefinition(name: "Ring Size", measurementType: .text, systemImage: "circle", category: clothesCategory),
             
             // Health measurements
-            StatDefinition(name: "Blood Pressure", measurementType: .text, systemImage: "heart.fill", categoryId: healthCategory.id),
-            StatDefinition(name: "Blood Group", measurementType: .text, systemImage: "drop.fill", categoryId: healthCategory.id),
-            StatDefinition(name: "BMI", measurementType: .decimal, step: 0.1, systemImage: "function", categoryId: healthCategory.id),
-            StatDefinition(name: "Body Fat %", measurementType: .decimal, step: 0.1, systemImage: "percent", categoryId: healthCategory.id)
+            StatDefinition(name: "Blood Pressure", measurementType: .text, systemImage: "heart.fill", category: healthCategory),
+            StatDefinition(name: "Blood Group", measurementType: .text, systemImage: "drop.fill", category: healthCategory),
+            StatDefinition(name: "BMI", measurementType: .digit, step: 0.1, systemImage: "function", category: healthCategory),
+            StatDefinition(name: "Body Fat %", measurementType: .digit, step: 0.1, systemImage: "percent", category: healthCategory)
         ]
         
         defaults.forEach { stat in
