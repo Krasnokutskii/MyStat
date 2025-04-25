@@ -174,6 +174,10 @@ struct LabeledField: View {
                 .fill(Color.white)
                 .shadow(color: Color.blue.opacity(0.05), radius: 2, x: 0, y: 2)
         )
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.blue.opacity(0.15), lineWidth: 1)
+        )
 
     }
 }

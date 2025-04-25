@@ -38,13 +38,6 @@ struct StatItemView: View {
             path.append(.showStatView(stat: stat))
         }
     }
-    
-//    private func getLatestValue(for stat: StatDefinition) -> String {
-//        guard let lastMeasurement = stat.measurements.last else {
-//            return "No Value"
-//        }
-//        return lastMeasurement.value
-//    }
 }
 
 #Preview {

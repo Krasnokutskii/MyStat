@@ -20,7 +20,6 @@ struct AddStatView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
-            
             basicInfoSection
                 .padding(.horizontal)
             
@@ -49,7 +48,7 @@ struct AddStatView: View {
                                 .font(.title)
                                 .frame(width: 60, height: 60)
                                 .background(selectedImage == image ? Color.blue.opacity(0.2) : Color.clear)
-                                .cornerRadius(10)
+                                .cornerRadius(12)
                         }
                     }
                 }
@@ -77,7 +76,7 @@ struct AddStatView: View {
                 .padding()
                 .background(isValid ? Color.blue : Color.gray.opacity(0.3))
                 .foregroundColor(.white)
-                .cornerRadius(10)
+                .cornerRadius(12)
         }
         .padding(.horizontal)
         .padding(.bottom, 16)
@@ -116,6 +115,8 @@ struct AddStatView: View {
     
     private var basicInfoSection: some View {
         VStack(alignment: .leading, spacing: 16) {
+            StatItemView(stat: StatDefinition(name: statName, measurementType: measurementType, systemImage: selectedImage, category: selectedCategory ?? StatCategory(name: "default")), path: $path)
+                .disabled(true)
             VStack(spacing: 12) {
                 // Stat Name Field
                 LabeledField(icon: selectedImage, placeholder: "Stat Name", text: $statName, field: .image)
@@ -200,7 +201,7 @@ struct AddStatView: View {
         person.stats.append(newStat)
         path.removeLast()
     }
-} 
+}
 
 #Preview {
     NavigationStack {
