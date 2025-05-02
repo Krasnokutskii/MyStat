@@ -56,6 +56,9 @@ struct MainPanel: View {
                         personPicker
                     }
                     Spacer()
+                    searchField
+                    Spacer()
+                        .frame(height: 5)
                     if let person = selectedPerson {
                         statsGrid(for: person)
                         
@@ -115,9 +118,17 @@ struct MainPanel: View {
     private func statsGrid(for person: Person) -> some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
-                ForEach(person.statsByCategory, id: \.0) { category, stats in
+                ForEach(person.statsByCategory.filter { category, stats in
+                    // Only show categories that contain matching stats
+                    searchText.isEmpty || stats.contains(where: {
+                        $0.name.localizedCaseInsensitiveContains(searchText)
+                    })
+                }, id: \.0) { category, stats in
                     Section(header: categoryHeader(category)) {
-                        ForEach(stats) { stat in
+                        ForEach(stats.filter { stat in
+                            // Only show stats that match the search
+                            searchText.isEmpty || stat.name.localizedCaseInsensitiveContains(searchText)
+                        }) { stat in
                             StatItemView(stat: stat, path: $path)
                         }
                     }
@@ -149,6 +160,7 @@ struct MainPanel: View {
             }
             .padding(.top, 1)
         }
+        .padding(5)
         .coordinateSpace(name: "scroll")
         .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
             scrollOffset = value
@@ -156,9 +168,19 @@ struct MainPanel: View {
     }
     
     private var searchField: some View {
-        TextField("Search", text: $searchText)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .padding(.horizontal)
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.gray)
+
+            TextField("Search", text: $searchText)
+                .textFieldStyle(PlainTextFieldStyle())
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+        }
+        .padding(10)
+        .background(Color(.systemGray6))
+        .cornerRadius(10)
+        .padding(.horizontal)
     }
     
     @State var isInEditMode: Bool = false

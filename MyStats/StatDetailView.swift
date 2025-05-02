@@ -8,63 +8,66 @@ struct StatDetailView: View {
     @State private var newValue = ""
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 40) {
-                
-                headerView
-                    .padding(20)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.blue.opacity(0.1))
-                        .frame(maxWidth: .infinity)
-                    AddNewMeasurementView(statDefinition: statDefinition)
-                }
-                
-                if statDefinition.measurementType != .text && statDefinition.measurements.count > 1 {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(Color.blue.opacity(0.1))
-                            .frame(maxWidth: .infinity)
-                        VStack(alignment: .leading, spacing: 10) {
-                            ChartView(measurements: statDefinition.measurements)
-                                .frame(height: 200)
-                                .padding(.vertical)
+        VStack{
+            ScrollView {
+                VStack(alignment: .leading, spacing: 40) {
+                    
+                    headerView
+                        .padding(20)
+                    
+                    if statDefinition.measurementType != .text && statDefinition.measurements.count > 1 {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color.blue.opacity(0.1))
+                                .frame(maxWidth: .infinity)
+                            VStack(alignment: .leading, spacing: 10) {
+                                ChartView(measurements: statDefinition.measurements)
+                                    .frame(height: 200)
+                                    .padding(.vertical)
+                            }
+                            .padding()
                         }
-                        .padding()
+                    }
+                    
+                    // History Section
+                    if !statDefinition.measurements.isEmpty {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color.blue.opacity(0.1))
+                                .frame(maxWidth: .infinity)
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text("History")
+                                    .font(.headline)
+                                history
+                            }
+                            .padding()
+                        }
+                    }
+                    
+                    // Stats Section
+                    if statDefinition.measurementType != .text && statDefinition.measurements.count > 1 {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color.blue.opacity(0.1))
+                                .frame(maxWidth: .infinity)
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text("Statistics")
+                                    .font(.headline)
+                                statistics
+                            }
+                            .padding()
+                        }
                     }
                 }
-                
-                // History Section
-                if !statDefinition.measurements.isEmpty {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(Color.blue.opacity(0.1))
-                            .frame(maxWidth: .infinity)
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text("History")
-                                .font(.headline)
-                            history
-                        }
-                        .padding()
-                    }
-                }
-                
-                // Stats Section
-                if statDefinition.measurementType != .text && statDefinition.measurements.count > 1 {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(Color.blue.opacity(0.1))
-                            .frame(maxWidth: .infinity)
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text("Statistics")
-                                .font(.headline)
-                            statistics
-                        }
-                        .padding()
-                    }
-                }
+                .padding()
             }
-            .padding()
+            AddNewMeasurementView(statDefinition: statDefinition)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 20).fill(Color.blue.opacity(0.1)))
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .padding(.bottom, 16)
         }
     }
     

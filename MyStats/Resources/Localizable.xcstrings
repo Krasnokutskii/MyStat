@@ -75,13 +75,22 @@
     "Delete" : {
 
     },
+    "Digit" : {
+
+    },
     "Done" : {
+
+    },
+    "Enter value" : {
 
     },
     "Expand" : {
 
     },
     "History" : {
+
+    },
+    "Input Type:" : {
 
     },
     "Invalid Input" : {

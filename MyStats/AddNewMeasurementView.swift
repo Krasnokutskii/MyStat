@@ -23,17 +23,18 @@ struct AddNewMeasurementView: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            dateDisplay
-            inputField
-
             if showDatePicker {
+                dateDisplay
                 DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
                     .onChange(of: selectedDate) { _, _ in
                         userDidPickDate = true
                     }
                     .datePickerStyle(.graphical)
                     .transition(.opacity)
+            } else {
+                dateDisplay
             }
+            inputField
 
             Button {
                 setMeasurement()
@@ -51,7 +52,6 @@ struct AddNewMeasurementView: View {
             }
             .disabled(newValue.isEmpty)
         }
-        .padding()
     }
 
     private var inputField: some View {
@@ -82,8 +82,6 @@ struct AddNewMeasurementView: View {
 
         statDefinition.measurements.append(measurement)
         newValue = ""
-
-        // 🔸 Reset picker state
         showDatePicker = false
         userDidPickDate = false
         selectedDate = Date()

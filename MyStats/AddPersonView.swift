@@ -28,53 +28,53 @@ struct AddPersonView: View {
     let defaultAvatars = ["person.fill", "figure.walk", "heart.fill", "leaf.fill", "flame.fill"]
 
     var body: some View {
-            VStack(alignment: .leading, spacing: 18) {
-                // Avatar
-                VStack(spacing: 10) {
-                    Button {
-                        showingAvatarOptions = true
-                    } label: {
-                        ZStack {
-                            Circle()
-                                .fill(Color.gray.opacity(0.15))
-                                .frame(width: 100, height: 100)
-                            if let selectedAvatar = selectedAvatar {
-                                Image(systemName: selectedAvatar)
-                                    .font(.system(size: 40))
-                                    .foregroundColor(.blue)
-                            } else {
-                                Text(name.isEmpty ? "?" : String(name.prefix(1)).uppercased())
-                                    .font(.system(size: 40, weight: .semibold))
-                                    .foregroundColor(.blue)
-                            }
+        VStack(alignment: .leading, spacing: 18) {
+            // Avatar
+            VStack(spacing: 10) {
+                Button {
+                    showingAvatarOptions = true
+                } label: {
+                    ZStack {
+                        Circle()
+                            .fill(Color.gray.opacity(0.15))
+                            .frame(width: 100, height: 100)
+                        if let selectedAvatar = selectedAvatar {
+                            Image(systemName: selectedAvatar)
+                                .font(.system(size: 40))
+                                .foregroundColor(.blue)
+                        } else {
+                            Text(name.isEmpty ? "?" : String(name.prefix(1)).uppercased())
+                                .font(.system(size: 40, weight: .semibold))
+                                .foregroundColor(.blue)
                         }
                     }
-                    .buttonStyle(.plain) // Remove button styling
-                    Text("Choose Avatar")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.top, 16)
-                .sheet(isPresented: $showingAvatarOptions) {
-                    AvatarSelectionView(selectedAvatar: $selectedAvatar, showingSheet: $showingAvatarOptions)
-                }
-
-                // Basic Info Section
-                VStack(alignment: .leading, spacing: 14) {
-                    LabeledField(icon: "person.fill", placeholder: "Name", text: $name, field: .name)
-                        .focused($focusedField, equals: .name)
-                    LabeledField(icon: "scalemass.fill", placeholder: "Weight (kg)", text: $weight, field: .weight, keyboardType: .decimalPad, unit: "kg")
-                        .focused($focusedField, equals: .weight)
-                    LabeledField(icon: "figure.walk", placeholder: "Height (cm)", text: $height, field: .height, keyboardType: .decimalPad, unit: "cm")
-                        .focused($focusedField, equals: .height)
-                    LabeledField(icon: "calendar", placeholder: "Age", text: $age, field: .age, keyboardType: .numberPad)
-                        .focused($focusedField, equals: .age)
-                }
-                .padding(.horizontal)
-
-                Spacer()
-
+                .buttonStyle(.plain) // Remove button styling
+                Text("Choose Avatar")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.top, 16)
+            .sheet(isPresented: $showingAvatarOptions) {
+                AvatarSelectionView(selectedAvatar: $selectedAvatar, showingSheet: $showingAvatarOptions)
+            }
+            ScrollView {
+            // Basic Info Section
+            VStack(alignment: .leading, spacing: 14) {
+                LabeledField(icon: "person.fill", placeholder: "Name", text: $name, field: .name)
+                    .focused($focusedField, equals: .name)
+                LabeledField(icon: "scalemass.fill", placeholder: "Weight (kg)", text: $weight, field: .weight, keyboardType: .decimalPad, unit: "kg")
+                    .focused($focusedField, equals: .weight)
+                LabeledField(icon: "figure.walk", placeholder: "Height (cm)", text: $height, field: .height, keyboardType: .decimalPad, unit: "cm")
+                    .focused($focusedField, equals: .height)
+                LabeledField(icon: "calendar", placeholder: "Age", text: $age, field: .age, keyboardType: .numberPad)
+                    .focused($focusedField, equals: .age)
+            }
+            .padding(.horizontal)
+            
+            Spacer()
+        }
                 // Add Person Button
                 Button(action: {
                     addNewPerson()
@@ -93,7 +93,7 @@ struct AddPersonView: View {
                 .disabled(name.isEmpty || !isValidInput()) // Disable if name is empty or input is invalid
             }
             .navigationTitle("Create Profile")
-            .background(Color(.systemGray6))
+            //.background(Color(.systemGray6))
             .onTapGesture { hideKeyboard() }
             .padding(.bottom)
             .alert(isPresented: .constant(!isValidInput() && (!weight.isEmpty || !height.isEmpty || !age.isEmpty))) {

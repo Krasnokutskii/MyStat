@@ -10,6 +10,7 @@ struct AddStatView: View {
     @State private var selectedCategory: StatCategory?
     @State private var showingImagePicker = false
     @Binding var path: [MainPanelDestination]
+    @State private var inputValue = ""
     private let createNewCategory = StatCategory(id: UUID(), name: "➕ Create New")
     
     private let availableImages = [
@@ -23,7 +24,9 @@ struct AddStatView: View {
             basicInfoSection
                 .padding(.horizontal)
             
-            mesurementTypeSection
+            /*me*/
+            //surementTypeSection
+            ToggleTextField(value: $inputValue)
                 .padding(.horizontal)
             
             iconSection
@@ -65,7 +68,7 @@ struct AddStatView: View {
             }
         }
     }
-    
+   
     private var addStatButton: some View {
         Button(action: {
             addStat()
@@ -117,6 +120,10 @@ struct AddStatView: View {
         VStack(alignment: .leading, spacing: 16) {
             StatItemView(stat: StatDefinition(name: statName, measurementType: measurementType, systemImage: selectedImage, category: selectedCategory ?? StatCategory(name: "default")), path: $path)
                 .disabled(true)
+                .padding(.top, 16)  // Top padding 16
+                .padding(.leading, 40)  // Leading padding 20
+                .padding(.trailing, 40)  // Trailing padding 20
+                .padding(.bottom, 24)
             VStack(spacing: 12) {
                 // Stat Name Field
                 LabeledField(icon: selectedImage, placeholder: "Stat Name", text: $statName, field: .image)
@@ -182,9 +189,79 @@ struct AddStatView: View {
                 }
                 Spacer()
             }
+
+//            TextField("Enter value", text: $measurementValue)
+//                .keyboardType(measurementType == .digit ? .decimalPad : .default)
+//                .textFieldStyle(RoundedBorderTextFieldStyle())
+//                .padding(.horizontal)
         }
     }
-    
+
+    struct ToggleTextField: View {
+        @Binding var value: String
+        @State private var inputType: MeasurementType = .digit
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Text("Input Type:")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+
+                    Spacer()
+
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.gray.opacity(0.2))
+                            .frame(width: 120, height: 36)
+
+                        HStack(spacing: 0) {
+                            Text("Digit")
+                                .frame(width: 60, height: 36)
+                            Text("Text")
+                                .frame(width: 60, height: 36)
+                        }
+
+                        HStack(spacing: 0) {
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.blue)
+                                .frame(width: 60, height: 36)
+                                .offset(x: inputType == .digit ? -30 : 30)
+                                .animation(.easeInOut(duration: 0.25), value: inputType)
+                        }
+
+                        HStack(spacing: 0) {
+                            Button {
+                                inputType = .digit
+                            } label: {
+                                Text("Digit")
+                                    .frame(width: 60, height: 36)
+                                    .foregroundColor(inputType == .digit ? .white : .black)
+                            }
+
+                            Button {
+                                inputType = .text
+                            } label: {
+                                Text("Text")
+                                    .frame(width: 60, height: 36)
+                                    .foregroundColor(inputType == .text ? .white : .black)
+                            }
+                        }
+                    }
+                }
+
+                TextField("Enter value", text: $value)
+                    .keyboardType(inputType == .digit ? .decimalPad : .default)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(12)
+        }
+    }
+
+
+
     private var isValid: Bool {
         !statName.isEmpty && selectedCategory != nil
     }
